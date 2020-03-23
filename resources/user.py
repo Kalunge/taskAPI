@@ -1,12 +1,14 @@
 from main import api, fields, Resource
+from models.usermodel import UserModel
 
 ns_users = api.namespace('users', description='all tasks regarding users')
 
 
 @ns_users.route('')
 class UsersList(Resource):
-    def get(self):
+    def get(self, _id):
         '''return a list of users'''
+        return UserModel.fetch_by_id(_id)
 
 
 @ns_users.route('/<int:id>')
