@@ -1,4 +1,5 @@
 from main import db, ma
+from sqlalchemy import func
 
 
 class UserModel(db.Model):
@@ -8,8 +9,9 @@ class UserModel(db.Model):
     full_name = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(80),nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), default=func.now())
 
-    tasks = db.relationship('TaskModel', backref='user', lazy='True')
+    tasks = db.relationship('TaskModel', backref='user', lazy=True)
 
 
     def save_to_db(self):
@@ -24,10 +26,14 @@ class UserModel(db.Model):
     def fetch_by_id(cls, _id):
         return cls.query.filter_by(id=_id).first()
 
+    @classmethod
+    def fetch_all(cls):
+        return cls.query.all()
+
 
 class UsersSchema(ma.Schema):
     class Meta:
-        fields = ("id", "full_name", "email")
+        fields = ("id", "full_name", "email", "created_at")
 
 user_schema = UsersSchema()
 users_schema = UsersSchema(many=True)

@@ -8,7 +8,8 @@ ns_tasks = api.namespace('tasks', description='All tasks regarding tasks')
 # models
 task_model = api.model('Task', {
     'title':fields.String(),
-    'description':fields.String()
+    'description':fields.String(),
+    'user_id':fields.Integer()
 })
 
 @ns_tasks.route('')
@@ -19,10 +20,11 @@ class TasksList(Resource):
 
     @api.expect(task_model)
     def post(self):
-        """ use this ednpoint to add new tasks """
+        """ use this ednpoint to add a new task """
         data = api.payload
         task = TaskModel(**data)
-        return task_schema.dump(task.create_record())
+        task.create_record()
+        return task_schema.dump(task)
 
 
 

@@ -7,17 +7,13 @@ class TaskModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(), nullable=False)
     description = db.Column(db.String(), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     completed = db.Column(db.Integer, nullable=False, default=0)
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
-
-
-    
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def create_record(self):
         db.session.add(self)
         db.session.commit()
-        return self
 
     @classmethod
     def fetch_all(cls):
@@ -32,7 +28,6 @@ class TaskModel(db.Model):
         db.session.commit()
 
     def save_to_db(self):
-        # db.session.add(self)
         db.session.commit()
 
 
