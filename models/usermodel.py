@@ -1,14 +1,15 @@
 from main import db, ma
 from sqlalchemy import func
+from werkzeug.security import check_password_hash
 
 
 class UserModel(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    full_name = db.Column(db.String(80), nullable=False)
-    email = db.Column(db.String(80),nullable=False, unique=True)
-    password = db.Column(db.String(80), nullable=False)
+    full_name = db.Column(db.String(), nullable=False)
+    email = db.Column(db.String(),nullable=False, unique=True)
+    password = db.Column(db.String(), nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
 
     tasks = db.relationship('TaskModel', backref='user', lazy=True)
@@ -30,6 +31,25 @@ class UserModel(db.Model):
     def fetch_all(cls):
         return cls.query.all()
 
+    @classmethod
+    def check_if_mail_exists(cls, email):
+        user = cls.query.filter_by(email=email).first()
+        if user:
+            return True
+        else:
+            return False
+    
+    @classmethod
+    def check_passoword(cls, email, password):
+        user = cls.query.filter_by(email=email).first()
+        if user and check_password_hash(user.password, password):
+            return True
+        else:
+            return False
+
+    @classmethod
+    def get_user_id(cls, email):
+        return cls.query.filter_by(email=email).first().id
 
 class UsersSchema(ma.Schema):
     class Meta:

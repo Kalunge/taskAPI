@@ -16,15 +16,6 @@ class UsersList(Resource):
         '''return a list of users'''
         return users_schema.dump(UserModel.fetch_all())
 
-    @api.expect(user_model)
-    def post(self):
-        '''edit a user by id'''
-        data = api.payload
-        user = UserModel(**data)
-        user.save_to_db()
-        return user_schema.dump(user)
-
-
 @ns_users.route('/<int:_id>')
 class Users(Resource):
     def get(self, _id):
