@@ -2,3 +2,4 @@
 /Pipfile
 /Pipfile.lock
 /Configs/
+/__pycache__

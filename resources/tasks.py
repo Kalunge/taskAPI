@@ -3,7 +3,7 @@ from models.taskmodel import TaskModel, task_schema, tasks_schema
 from models.usermodel import UserModel
 
 # namespace
-ns_tasks = api.namespace('tasks', description='All tasks regarding tasks')
+ns_tasks = api.namespace('tasks', description='All tasks regarding tasks')  
 
 
 # models
@@ -15,6 +15,7 @@ task_model = api.model('Task', {
 
 @ns_tasks.route('')
 class TasksList(Resource):
+    @api.doc(security='apiKey')
     @jwt_required
     def get(self):
         """ use this ednpoint to get a list of tasks """
@@ -23,6 +24,7 @@ class TasksList(Resource):
         user_tasks = user.tasks
         return tasks_schema.dump(user_tasks)
 
+    @api.doc(security='apiKey')
     @api.expect(task_model)
     @jwt_required
     def post(self):
@@ -35,6 +37,7 @@ class TasksList(Resource):
 
 @ns_tasks.route('/<int:_id>')
 class Task(Resource):
+    @api.doc(security='apiKey')
     @jwt_required
     def get(self, _id):
         '''retrieve a task by it's id'''
@@ -50,6 +53,7 @@ class Task(Resource):
         # return task_list[_id-1]
         
     @api.expect(task_model)
+    @api.doc(security='apiKey')
     @jwt_required
     def put(self, _id):
         '''edit a task by it's id'''
@@ -65,6 +69,8 @@ class Task(Resource):
             return task_schema.dump(task), 200
         else:
             return {'message': 'Task does not exist'}, 404
+
+    @api.doc(security='apiKey')
     @jwt_required
     def delete(self, _id):
         '''delete a task by it's id'''
