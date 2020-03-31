@@ -13,18 +13,17 @@ sentry_sdk.init(
     integrations=[FlaskIntegration()]
 )
 
+app = Flask(__name__)
 
 authorizations = {
-    'apikey': {
-        'type': 'apiKey',
-        'in': 'header',
-        'name': 'Authorization',
-        'description': "type in the *'value'* input box below: **'Bearer &lt;JWT&gt;'**, where JWT is the token"
-        
+    "apikey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "Type in the *value into the box below**Bearer & where jwt is token",
     }
 }
 
-app = Flask(__name__)
 app.config.from_object(DevelopmentConfigs)
 app.config['PROPAGATE_EXCEPTIONS'] = True
 blueprint = Blueprint('taskApi', __name__, url_prefix='/api/home')
