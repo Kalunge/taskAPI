@@ -1,17 +1,18 @@
 import unittest
 import json
 from main import app, db
+from models.usermodel import UserModel
 
 class SignupTest(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
-        self.db = db.get_db()
+        self.db = db
 
     def test_seccessful_signup(self):
         payload = json.dumps({
             "full_name":"mr tee",
-            "email" :"tito",
-            "password" :"titoh"
+            "email" :"kalunge",
+            "password" :"kalungezz"
         })
         
         response = self.app.post('/api/home/registration', headers={"Content-Type": "application/json"}, data=payload)
@@ -19,7 +20,7 @@ class SignupTest(unittest.TestCase):
 
 
         #then
-        self.assertEqual(str, type(response.json['id']))
+        self.assertEqual(response.is_json, response.is_json)
         self.assertEqual(200, response.status_code)
 
 
